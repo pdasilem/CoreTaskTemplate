@@ -13,7 +13,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public UserDaoJDBCImpl() {}
 
     public void createUsersTable() {
-        try (Connection con = Util.getConnection(); Statement state = con.createStatement()) {
+        try (Connection con = Util.getConnection()) {
+            Statement state = con.createStatement();
             state.execute("CREATE TABLE IF NOT EXISTS user" +
                     "(id BIGINT(19) NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                     "name VARCHAR(25) NOT NULL, lastname VARCHAR(45) NOT NULL, " +
@@ -24,7 +25,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try (Connection con = Util.getConnection(); Statement state = con.createStatement()){
+        try (Connection con = Util.getConnection()) {
+            Statement state = con.createStatement();
             state.execute("DROP TABLE IF EXISTS user");
         } catch (SQLException e) {
             System.out.println("Unable to drop user table: " + e);
@@ -33,7 +35,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try (Connection con = Util.getConnection(); PreparedStatement state = con.prepareStatement("INSERT INTO user (name, lastName, age) VALUES (?,?,?)")) {
+        try (Connection con = Util.getConnection()) {
+            PreparedStatement state = con.prepareStatement("INSERT INTO user (name, lastName, age) VALUES (?,?,?)");
             state.setString(1, name);
             state.setString(2, lastName);
             state.setByte(3, age);
@@ -45,7 +48,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
-        try (Connection con = Util.getConnection(); PreparedStatement state = con.prepareStatement("DELETE FROM user WHERE id = ?")) {
+        try (Connection con = Util.getConnection()) {
+            PreparedStatement state = con.prepareStatement("DELETE FROM user WHERE id = ?");
             state.setLong(1, id);
             state.executeUpdate();
         } catch (SQLException e) {
@@ -56,7 +60,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        try (Connection con = Util.getConnection(); PreparedStatement state = con.prepareStatement("SELECT * FROM user")){
+        try (Connection con = Util.getConnection()){
+            PreparedStatement state = con.prepareStatement("SELECT * FROM user");
             ResultSet resSet = state.executeQuery();
             while (resSet.next()) {
                 User user = new User(resSet.getString(2), resSet.getString(3),
@@ -70,7 +75,8 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
-        try (Connection con = Util.getConnection(); Statement state = con.createStatement()){
+        try (Connection con = Util.getConnection()){
+            Statement state = con.createStatement();
             state.execute("TRUNCATE TABLE user");
         } catch (SQLException e) {
             System.out.println("Unable to drop user table: " + e);
